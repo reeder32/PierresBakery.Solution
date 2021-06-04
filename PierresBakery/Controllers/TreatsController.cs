@@ -67,7 +67,7 @@ namespace PierresBakery.Controllers
         treat.User = currentUser;
         _db.Treats.Add(treat);
         _db.SaveChanges();
-      Console.WriteLine($"{treat.TreatId}", FlavorId);
+      Console.WriteLine($"treatId {treat.TreatId} flavorId {FlavorId}");
       if (FlavorId != 0 && !IsJoined(treat.TreatId, FlavorId))
         {
             _db.FlavorTreats.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = treat.TreatId });
@@ -101,12 +101,15 @@ namespace PierresBakery.Controllers
     }
 
     [HttpPost]
-    public ActionResult Edit(Treat treat, int FlavorId)
+    public async Task<ActionResult> Edit(Treat treat, int FlavorId)
     {
       if (FlavorId != 0 && !IsJoined(treat.TreatId, FlavorId))
       {
         _db.FlavorTreats.Add(new FlavorTreat() { TreatId = treat.TreatId, FlavorId = FlavorId });
       }
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var currentUser = await _userManager.FindByIdAsync(userId);
+        treat.User = currentUser;
       _db.Entry(treat).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Index");

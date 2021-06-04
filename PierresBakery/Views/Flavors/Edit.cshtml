@@ -6,14 +6,20 @@
 <h2>Edit</h2>
 
 <h4>Edit this Flavor: @Html.DisplayFor(model => model.Name)</h4>
-
-@using (Html.BeginForm())
-{
-  @Html.HiddenFor(model => model.FlavorId)
-
-  @Html.LabelFor(model => model.Name)
-  @Html.EditorFor(model => model.Name)
-  @Html.LabelFor(model => model.Description)
-  @Html.EditorFor(model => model.Description)
-  <input type="submit" value="Save" />
-}
+<div class="form-group">
+  @using (Html.BeginForm())
+  {
+    @Html.HiddenFor(model => model.FlavorId)
+    <div class="form-group">
+      @Html.LabelFor(model => model.Name)
+      @Html.EditorFor(model => model.Name)
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(model => model.Description)
+      @Html.EditorFor(model => model.Description)
+    </div>
+    <input type="submit" value="Save" class="btn btn-primary" />
+  }
+</div>
+</br>
+@Html.ActionLink("Cancel", "Details", new {id = Model.FlavorId}, new {@class="btn btn-warning"})

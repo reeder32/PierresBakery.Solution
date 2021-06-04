@@ -24,9 +24,9 @@ else
 }
 @if (ViewBag.IsOwner)
 {
-  @Html.ActionLink("Edit", "Edit", new {id = Model.FlavorId})
-  <br />
-  @Html.ActionLink("Delete", "Delete", new {id = Model.FlavorId})
+  @Html.ActionLink("Edit", "Edit", new {id = Model.FlavorId}, new {@class="btn btn-info"})
+  <hr />
+  @Html.ActionLink("Delete", "Delete", new {id = Model.FlavorId}, new {@class="btn btn-warning"})
 }
 else
 {
