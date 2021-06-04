@@ -1,0 +1,24 @@
+@{
+  Layout = "_Layout";
+}
+
+@model PierresBakery.Models.Flavor
+
+<h2>Flavor Details</h2>
+<hr />
+<h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
+<p>@Html.DisplayNameFor(model => model.Description): @Html.DisplayFor(model => model.Description)</p>
+@if (@Model.FlavorTreats.Count == 0)
+{
+  <p>This Flavor does not contain any Treats</p>
+}
+else
+{
+  <h4>Treats the Flavor contains:</h4>
+  <ul>
+  @foreach (var ft in Model.FlavorTreats)
+    {
+      @Html.ActionLink($"{ft.Treat.Name}", "Details", "Treats", new {id = ft.Treat.TreatId})
+    }
+  </ul>
+}

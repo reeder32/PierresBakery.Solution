@@ -10,13 +10,13 @@
             <h4 class="">Flavors</h4>
             @if (@Model["flavors"].Count == 0)
             {
-                @Html.ActionLink("Add new flavor", "Create", "Flavors")
+                @Html.ActionLink("Add new Flavor", "Create", "Flavors")
             }
             else
             {
                 @foreach (Flavor f in @Model["flavors"])
                 {
-                    @Html.ActionLink($"{f.Description}", "Details", "Flavors", new {id = f.FlavorId})
+                    @Html.ActionLink($"{f.Name}", "Details", "Flavors", new {id = f.FlavorId})
                 }
             }
         </div>
@@ -24,13 +24,13 @@
             <h4 class="">Treats</h4>
             @if (@Model["treats"].Count == 0)
             {
-                @Html.ActionLink("Add new flavor", "Create", "Treats")
+                @Html.ActionLink("Add new Treat", "Create", "Treats")
             }
             else
             {
-                @foreach (Flavor f in @Model["treats"])
+                @foreach (Treat t in @Model["treats"])
                 {
-                    @Html.ActionLink($"{f.Description}", "Details", "Treats", new {id = f.FlavorId})
+                    @Html.ActionLink($"{t.Name}", "Details", "Treats", new {id = t.TreatId})
                 }
             }
         </div>

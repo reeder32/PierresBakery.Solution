@@ -2,7 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using PierresBakery.Models;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Security.Claims;
+using System.Collections.Generic;
 using PierresBakery.ViewModels;
+
 
 namespace PierresBakery.Controllers
 {
@@ -42,24 +46,37 @@ namespace PierresBakery.Controllers
           return View();
         }
 
-      [HttpPost]
-      public async Task<ActionResult> Login(LoginViewModel model)
-      {
-          Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
-          if (result.Succeeded)
-          {
-              return RedirectToAction("Index", "Home");
-          }
-          else
-          {
-              return View();
-          }
-      }
-      [HttpPost]
-      public async Task<ActionResult> LogOff()
-      {
-          await _signInManager.SignOutAsync();
-          return RedirectToAction("Index", "Home");
-      }
-          }
+        [HttpPost]
+        public async Task<ActionResult> Login(LoginViewModel model)
+        {
+            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return View();
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> LogOff()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+        public async Task<ActionResult> Details()
+        {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUser = await _userManager.FindByIdAsync(userId);
+            var userFlavors = _db.Flavors.Where(entry => entry.User.Id == currentUser.Id).ToList();
+            var userTreats = _db.Treats.Where(entry => entry.User.Id == currentUser.Id).ToList();
+            var model = new Dictionary<string, object>
+            {
+                { "treats", userTreats },
+                { "flavors", userFlavors }
+            };
+            return View(model);
+        }
+    }
 }

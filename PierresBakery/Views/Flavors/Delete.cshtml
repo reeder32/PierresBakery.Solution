@@ -1,0 +1,12 @@
+@{
+  Layout = "_Layout";
+}
+@model PierresBakery.Models.Flavor
+
+<h2>Delet Flavor @Html.DisplayFor(model => model.Name)</h2>
+
+<p>Description: @Html.DisplayFor(model=>model.Description)</p>
+@using (Html.BeginForm())
+{
+  <input type="submit" value="Delete" />
+}
