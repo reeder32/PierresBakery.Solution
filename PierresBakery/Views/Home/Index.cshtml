@@ -1,8 +1,38 @@
 ﻿@{
     Layout = "_Layout";
 }
+@using PierresBakery.Models
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h4 class="">Flavors</h4>
+            @if (@Model["flavors"].Count == 0)
+            {
+                @Html.ActionLink("Add new flavor", "Create", "Flavors")
+            }
+            else
+            {
+                @foreach (Flavor f in @Model["flavors"])
+                {
+                    @Html.ActionLink($"{f.Description}", "Details", "Flavors", new {id = f.FlavorId})
+                }
+            }
+        </div>
+        <div class="col-4">
+            <h4 class="">Treats</h4>
+            @if (@Model["treats"].Count == 0)
+            {
+                @Html.ActionLink("Add new flavor", "Create", "Treats")
+            }
+            else
+            {
+                @foreach (Flavor f in @Model["treats"])
+                {
+                    @Html.ActionLink($"{f.Description}", "Details", "Treats", new {id = f.FlavorId})
+                }
+            }
+        </div>
+    </div>
 </div>
