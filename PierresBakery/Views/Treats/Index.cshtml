@@ -1,0 +1,14 @@
+@{
+  Layout = "_Layout";
+}
+@model List<PierresBakery.Models.Treat>
+@using PierresBakery.Models
+
+<div class="text-center">
+  <h1>All Treats</h1>
+  @foreach (Treat t in Model)
+  {
+    @Html.ActionLink($"{t.Name}", "Details", new {id = t.TreatId})
+    <br>
+  }
+</div>

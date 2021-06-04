@@ -9,5 +9,6 @@
   @foreach (Flavor f in Model)
   {
     @Html.ActionLink($"{f.Name}", "Details", new {id = f.FlavorId})
+    <br>
   }
 </div>

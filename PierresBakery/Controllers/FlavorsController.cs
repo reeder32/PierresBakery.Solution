@@ -24,7 +24,18 @@ namespace PierresBakery.Controllers
     }
 
     private List<Flavor> AllFlavors() => _db.Flavors.ToList();
-
+  private async Task<bool> IsOwnerAsync(Flavor f) 
+  {
+      var user =  await _userManager.GetUserAsync(User);
+      if (user.Id == f.User.Id)
+    {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+  }
     [AllowAnonymous]
     public ActionResult Index() => View(AllFlavors());
 
@@ -39,20 +50,29 @@ namespace PierresBakery.Controllers
         _db.SaveChanges();
         return RedirectToAction("Index");
     }
-    public ActionResult Details(int id)
+    public async Task<ActionResult> Details(int id)
     {
       var thisFlavor = _db.Flavors
       .Include(flavor => flavor.FlavorTreats)
       .ThenInclude(join => join.Treat)
       .FirstOrDefault(flavor => flavor.FlavorId == id);
+      ViewBag.IsOwner =  await IsOwnerAsync(thisFlavor);
       return View(thisFlavor);
     }
 
-    public ActionResult Edit(int id)
+    public async Task<ActionResult> Edit(int id)
     {
       var thisFlavor = _db.Flavors.FirstOrDefault(Flavor => Flavor.FlavorId == id);
       ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
-      return View(thisFlavor);
+      var isOwnerAsync = await IsOwnerAsync(thisFlavor);
+      if (isOwnerAsync)
+      {
+        return View(thisFlavor);
+      }
+      else
+      {
+        return RedirectToAction("Details", new { id = thisFlavor.FlavorId });
+      }
     }
 
     [HttpPost]
@@ -67,10 +87,18 @@ namespace PierresBakery.Controllers
       return RedirectToAction("Index");
     }
   
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
       var thisFlavor = _db.Flavors.FirstOrDefault(Flavor => Flavor.FlavorId == id);
-      return View(thisFlavor);
+      if (await IsOwnerAsync(thisFlavor))
+      {
+        return View(thisFlavor);
+      }
+      else
+      {
+        return RedirectToAction("Details", new { id = thisFlavor.FlavorId });
+      }
+      
     }
 
     [HttpPost, ActionName("Delete")]

@@ -1,0 +1,14 @@
+@{
+  Layout = "_Layout";
+}
+@model PierresBakery.Models.Treat
+
+<h2>Delete Flavor @Html.DisplayFor(model => model.Name)</h2>
+
+<p>Description: @Html.DisplayFor(model=>model.Description)</p>
+@using (Html.BeginForm())
+{
+  <input type="submit" value="Delete" class="btn btn-danger" />
+}
+</br>
+@Html.ActionLink("Cancel", "Details", new {id = Model.TreatId}, new {@class="btn btn-warning"})

@@ -8,31 +8,30 @@
     <div class="row justify-content-center">
         <div class="col-4">
             <h4 class="">Flavors</h4>
-            @if (@Model["flavors"].Count == 0)
-            {
-                @Html.ActionLink("Add new Flavor", "Create", "Flavors")
-            }
-            else
+            @if (@Model["flavors"].Count != 0)
             {
                 @foreach (Flavor f in @Model["flavors"])
                 {
                     @Html.ActionLink($"{f.Name}", "Details", "Flavors", new {id = f.FlavorId})
+                    <br>
                 }
             }
+            <hr>
+            @Html.ActionLink("Add new Flavor", "Create", "Flavors")
         </div>
         <div class="col-4">
             <h4 class="">Treats</h4>
-            @if (@Model["treats"].Count == 0)
-            {
-                @Html.ActionLink("Add new Treat", "Create", "Treats")
-            }
-            else
+            @if (@Model["treats"].Count != 0)
             {
                 @foreach (Treat t in @Model["treats"])
                 {
                     @Html.ActionLink($"{t.Name}", "Details", "Treats", new {id = t.TreatId})
+                    <br>
                 }
             }
+            <hr>
+            @Html.ActionLink("Add new Treat", "Create", "Treats")
+
         </div>
     </div>
 </div>
