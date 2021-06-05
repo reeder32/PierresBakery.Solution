@@ -7,7 +7,7 @@
 <h2>Edit</h2>
 
 <h4>Edit this Treat: @Html.DisplayFor(model => model.Name)</h4>
-<div class="form-group">
+<div class="form-group col-10">
   @using (Html.BeginForm())
   {
     @Html.HiddenFor(model => model.TreatId)
@@ -21,34 +21,26 @@
       @Html.EditorFor(model => model.Description)
     </div>
 
-    <input type="submit" value="Save" class="btn btn-primary" />
+    <input type="submit" value="Save & Exit" class="btn btn-primary" />
   }
-  @foreach (Flavor flavor in ViewBag.Flavors)
+  <hr>
+  <h4>Add/Remove Flavor Profiles</h4>
+  @foreach (Flavor flavor in ViewBag.userFlavors)
   {
     <div class="form-group">
       @Html.Label(@flavor.Name)
-      @if (@Model.FlavorTreats.Count > 0)
-      {
-        @foreach (var ft in @Model.FlavorTreats)
-        {
-          @if (ft.FlavorId == flavor.FlavorId)
-          {
-            @Html.ActionLink("-", "DeleteFlavor", new { TreatId = Model.TreatId, FlavorId = flavor.FlavorId })
-
-          }
-          else
-          {
-            @Html.ActionLink("+", "AddFlavor", new { TreatId = Model.TreatId, FlavorId = flavor.FlavorId })
-
-          }
-        }
-      }
-      else
-      {
-        @Html.ActionLink("+", "AddFlavor", new { TreatId = Model.TreatId, FlavorId = flavor.FlavorId })
-      }
+      @Html.ActionLink("-", "DeleteFlavor", new { TreatId = Model.TreatId, FlavorId = flavor.FlavorId }, new {@class="btn btn-danger"})
 
     </div>
   }
+   @foreach (Flavor flavor in ViewBag.userNonFlavors)
+  {
+    <div class="form-group">
+      @Html.Label(@flavor.Name)
+      @Html.ActionLink("+", "AddFlavor", new { TreatId = Model.TreatId, FlavorId = flavor.FlavorId }, new {@class="btn btn-success"})
+
+    </div>
+  }
+  
 
 </div>

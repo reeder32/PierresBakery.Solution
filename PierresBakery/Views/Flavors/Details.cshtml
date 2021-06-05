@@ -19,6 +19,7 @@ else
   @foreach (var ft in Model.FlavorTreats)
     {
       @Html.ActionLink($"{ft.Treat.Name}", "Details", "Treats", new {id = ft.Treat.TreatId})
+      <br>
     }
   </ul>
 }

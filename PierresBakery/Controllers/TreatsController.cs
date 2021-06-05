@@ -103,7 +103,26 @@ namespace PierresBakery.Controllers
     public async Task<ActionResult> Edit(int id)
     {
       var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
-      ViewBag.Flavors = _db.Flavors.ToList();
+      var flavorTreats = thisTreat.FlavorTreats;
+      var flavors = _db.Flavors.ToList();
+      var userFlavors = new List<Flavor>();
+      var userNonFlavors = new List<Flavor>();
+      foreach (var flavor in flavors)
+      {
+        userNonFlavors.Add(flavor);
+        foreach (FlavorTreat ft in flavorTreats)
+      {
+        if (ft.FlavorId == flavor.FlavorId)
+        {
+            userFlavors.Add(flavor);
+            userNonFlavors.Remove(flavor);
+          }
+
+      }
+      }
+      
+      ViewBag.userFlavors = userFlavors;
+      ViewBag.userNonFlavors = userNonFlavors;
       ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
       var isOwnerAsync = await IsOwnerAsync(thisTreat);
       if (isOwnerAsync)
