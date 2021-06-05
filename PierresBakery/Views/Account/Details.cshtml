@@ -3,9 +3,11 @@
 }
 
 @using PierresBakery.Models
+@using System.Security.Claims
 
 <div class="text-center">
-  <h1 class="display-4">My List</h1>
+  <h5>Yo! @User.Identity.Name</h5>
+  <h2 class="display-4">My List</h2>
   <div class="row justify-content-center">
     <div class="col-4">
       <h4 class="">My Flavors</h4>

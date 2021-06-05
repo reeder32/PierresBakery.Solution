@@ -28,10 +28,18 @@ namespace PierresBakery.Controllers
     private List<Treat> AllTreats() => _db.Treats.ToList();
     private async Task<bool> IsOwnerAsync(Treat t)
     {
-      var user = await _userManager.GetUserAsync(User);
-      if (user.Id == t.User.Id)
+      if (User.Identity.IsAuthenticated)
       {
-        return true;
+        Console.WriteLine(User.ToString());
+        var user = await _userManager.GetUserAsync(User);
+        if (user.Id == t.User.Id)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
       else
       {
@@ -79,17 +87,16 @@ namespace PierresBakery.Controllers
             _db.FlavorTreats.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = TreatId });
         }
         _db.SaveChanges();
-        Console.WriteLine($"Add: treatId: {TreatId} flavorId: {FlavorId}");
       return RedirectToAction("Edit", new {id = TreatId});
     }
      public ActionResult DeleteFlavor(int TreatId, int FlavorId)
     {
-      Console.WriteLine($"Delete: treatId: {TreatId} flavorId: {FlavorId}");
       var flavorTreat = _db.FlavorTreats.FirstOrDefault(ft => ft.FlavorId == FlavorId && ft.TreatId == TreatId);
       _db.Remove(flavorTreat);
       _db.SaveChanges();
       return RedirectToAction("Edit", new {id = TreatId});
     }
+    [AllowAnonymous]
     public async Task<ActionResult> Details(int id)
     {
       var thisTreat = _db.Treats
