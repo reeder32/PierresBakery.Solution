@@ -25,12 +25,12 @@ namespace PierresBakery.Controllers
     }
 
     private List<Flavor> AllFlavors() => _db.Flavors.ToList();
-  private async Task<bool?> IsOwnerAsync(Flavor f) 
+  private async Task<bool> IsOwnerAsync(Flavor f) 
   {
       if (User.Identity.IsAuthenticated)
       {
         var user = await _userManager.GetUserAsync(User);
-        if (user.Id == f.User.Id)
+        if (user.Id == f.UserId)
         {
           return true;
         }
@@ -73,10 +73,10 @@ namespace PierresBakery.Controllers
 
     public async Task<ActionResult> Edit(int id)
     {
-      var thisFlavor = _db.Flavors.FirstOrDefault(Flavor => Flavor.FlavorId == id);
-      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
+      Console.Write(id);
+      var thisFlavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
       var isOwnerAsync = await IsOwnerAsync(thisFlavor);
-      if ((bool)isOwnerAsync)
+      if (!isOwnerAsync)
       {
         return RedirectToAction("Details", new { id = thisFlavor.FlavorId });
       }
@@ -103,7 +103,7 @@ namespace PierresBakery.Controllers
     public async Task<ActionResult> Delete(int id)
     {
       var thisFlavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
-      if ((bool)await IsOwnerAsync(thisFlavor))
+      if (await IsOwnerAsync(thisFlavor))
       {
         return View(thisFlavor);
       }
