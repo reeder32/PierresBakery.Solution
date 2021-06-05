@@ -76,12 +76,14 @@ namespace PierresBakery.Controllers
     }
 
     [HttpPost]
-    public ActionResult Edit(Flavor Flavor, int TreatId)
+    public async Task<ActionResult> Edit(Flavor Flavor, int TreatId, string UserId)
     {
       if (TreatId != 0)
       {
         _db.FlavorTreats.Add(new FlavorTreat() { TreatId = TreatId, FlavorId = Flavor.FlavorId });
       }
+      var currentUser = await _userManager.FindByIdAsync(UserId);
+      Flavor.User = currentUser;
       _db.Entry(Flavor).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Index");

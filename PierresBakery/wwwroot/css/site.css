@@ -20,6 +20,18 @@ a {
   color: #0366d6;
 }
 
+.nav-item input {
+  padding: 0px;
+  background-color: white;
+  border-width: 0ch;
+  color: #545a7c;
+}
+
+.nav-item input:hover {
+  color: darkblue;
+  text-decoration: underline;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;

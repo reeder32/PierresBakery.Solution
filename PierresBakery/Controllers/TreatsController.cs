@@ -60,20 +60,35 @@ namespace PierresBakery.Controllers
     }
 
 [HttpPost]
-    public async Task<ActionResult> Create(Treat treat, int FlavorId)
+    public async Task<ActionResult> Create(Treat treat)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var currentUser = await _userManager.FindByIdAsync(userId);
         treat.User = currentUser;
         _db.Treats.Add(treat);
-        _db.SaveChanges();
-      Console.WriteLine($"treatId {treat.TreatId} flavorId {FlavorId}");
-      if (FlavorId != 0 && !IsJoined(treat.TreatId, FlavorId))
+        _db.SaveChanges();   
+        
+        return RedirectToAction("Edit", new {id = treat.TreatId});
+    }
+
+    public ActionResult AddFlavor(int TreatId, int FlavorId)
+    {
+      
+      if (FlavorId != 0 && !IsJoined(TreatId, FlavorId))
         {
-            _db.FlavorTreats.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = treat.TreatId });
+            _db.FlavorTreats.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = TreatId });
         }
         _db.SaveChanges();
-        return RedirectToAction("Index");
+        Console.WriteLine($"Add: treatId: {TreatId} flavorId: {FlavorId}");
+      return RedirectToAction("Edit", new {id = TreatId});
+    }
+     public ActionResult DeleteFlavor(int TreatId, int FlavorId)
+    {
+      Console.WriteLine($"Delete: treatId: {TreatId} flavorId: {FlavorId}");
+      var flavorTreat = _db.FlavorTreats.FirstOrDefault(ft => ft.FlavorId == FlavorId && ft.TreatId == TreatId);
+      _db.Remove(flavorTreat);
+      _db.SaveChanges();
+      return RedirectToAction("Edit", new {id = TreatId});
     }
     public async Task<ActionResult> Details(int id)
     {
@@ -88,6 +103,7 @@ namespace PierresBakery.Controllers
     public async Task<ActionResult> Edit(int id)
     {
       var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+      ViewBag.Flavors = _db.Flavors.ToList();
       ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
       var isOwnerAsync = await IsOwnerAsync(thisTreat);
       if (isOwnerAsync)
@@ -101,15 +117,11 @@ namespace PierresBakery.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult> Edit(Treat treat, int FlavorId)
+    public async Task<ActionResult> Edit(Treat treat, string UserId)
     {
-      if (FlavorId != 0 && !IsJoined(treat.TreatId, FlavorId))
-      {
-        _db.FlavorTreats.Add(new FlavorTreat() { TreatId = treat.TreatId, FlavorId = FlavorId });
-      }
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var currentUser = await _userManager.FindByIdAsync(userId);
-        treat.User = currentUser;
+     
+      var currentUser = await _userManager.FindByIdAsync(UserId);
+      treat.User = currentUser;
       _db.Entry(treat).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Index");

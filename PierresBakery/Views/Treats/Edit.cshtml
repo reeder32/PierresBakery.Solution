@@ -2,20 +2,53 @@
   Layout = "_Layout";
 }
 @model PierresBakery.Models.Treat
+@using PierresBakery.Models
 
 <h2>Edit</h2>
 
 <h4>Edit this Treat: @Html.DisplayFor(model => model.Name)</h4>
+<div class="form-group">
+  @using (Html.BeginForm())
+  {
+    @Html.HiddenFor(model => model.TreatId)
+    @Html.HiddenFor(model => model.UserId)
+    <div class="form-group">
+      @Html.LabelFor(model => model.Name)
+      @Html.EditorFor(model => model.Name)
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(model => model.Description)
+      @Html.EditorFor(model => model.Description)
+    </div>
 
-@using (Html.BeginForm())
-{
-  @Html.HiddenFor(model => model.TreatId)
+    <input type="submit" value="Save" class="btn btn-primary" />
+  }
+  @foreach (Flavor flavor in ViewBag.Flavors)
+  {
+    <div class="form-group">
+      @Html.Label(@flavor.Name)
+      @if (@Model.FlavorTreats.Count > 0)
+      {
+        @foreach (var ft in @Model.FlavorTreats)
+        {
+          @if (ft.FlavorId == flavor.FlavorId)
+          {
+            @Html.ActionLink("-", "DeleteFlavor", new { TreatId = Model.TreatId, FlavorId = flavor.FlavorId })
 
-  @Html.LabelFor(model => model.Name)
-  @Html.EditorFor(model => model.Name)
-  @Html.LabelFor(model => model.Description)
-  @Html.EditorFor(model => model.Description)
-  @Html.Label("Select Flavor Profile")
-  @Html.DropDownList("FlavorId")
-  <input type="submit" value="Save" class="btn btn-primary" />
-}
+          }
+          else
+          {
+            @Html.ActionLink("+", "AddFlavor", new { TreatId = Model.TreatId, FlavorId = flavor.FlavorId })
+
+          }
+        }
+      }
+      else
+      {
+        @Html.ActionLink("+", "AddFlavor", new { TreatId = Model.TreatId, FlavorId = flavor.FlavorId })
+      }
+
+    </div>
+  }
+
+</div>

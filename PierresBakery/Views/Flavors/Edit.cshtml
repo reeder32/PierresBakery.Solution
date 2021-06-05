@@ -10,6 +10,7 @@
   @using (Html.BeginForm())
   {
     @Html.HiddenFor(model => model.FlavorId)
+    @Html.HiddenFor(model => model.UserId)
     <div class="form-group">
       @Html.LabelFor(model => model.Name)
       @Html.EditorFor(model => model.Name)

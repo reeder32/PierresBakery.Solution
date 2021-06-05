@@ -2,15 +2,23 @@
   Layout = "_Layout";
 }
 @model PierresBakery.Models.Treat
+<div class="text-left-justify">
+  <h4>Add a new Treat</h4>
+  <div class="form-group">
+    @using (Html.BeginForm())
+    {
+      <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.TextBoxFor(model => model.Name)
+      </div>
+      <div class="form-group">
+        @Html.LabelFor(model => model.Description)
+        @Html.TextBoxFor(model => model.Description)
+      </div>
+      <input type="submit" value="Add new Treat" class="btn btn-primary" />
+    }
 
-<h4>Add a new Treat</h4>
-@using (Html.BeginForm())
-{
-  @Html.LabelFor(model => model.Name)
-  @Html.TextBoxFor(model => model.Name)
-  @Html.LabelFor(model => model.Description)
-  @Html.TextBoxFor(model => model.Description)
-  @Html.Label("Select Flavor Profile")
-  @Html.DropDownList("FlavorId")
-  <input type="submit" value="Add new Treat" class="btn btn-primary" />
-}
+
+  </div>
+  @Html.ActionLink("Cancel", "Index","Home",null, new {@class="btn btn-warning"})
+</div>
