@@ -31,6 +31,7 @@
                                 @using (Html.BeginForm("LogOff", "Account"))
                                 {
                                     <input type="submit" class="btn-default" value="Log out" />
+                                    @Html.ActionLink("My List" ,"Details", "Account" )
                                 }
                             }
                             else

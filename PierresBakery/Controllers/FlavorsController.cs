@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using PierresBakery.Models;
 
 namespace PierresBakery.Controllers
@@ -91,13 +92,15 @@ namespace PierresBakery.Controllers
   
     public async Task<ActionResult> Delete(int id)
     {
-      var thisFlavor = _db.Flavors.FirstOrDefault(Flavor => Flavor.FlavorId == id);
+      var thisFlavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
       if (await IsOwnerAsync(thisFlavor))
       {
+        Console.WriteLine("Is Owner");
         return View(thisFlavor);
       }
       else
       {
+        Console.WriteLine("Is Not Owner");
         return RedirectToAction("Details", new { id = thisFlavor.FlavorId });
       }
       
@@ -106,7 +109,8 @@ namespace PierresBakery.Controllers
     [HttpPost, ActionName("Delete")]
     public ActionResult DeleteConfirmed(int id)
     {
-      var thisFlavor = _db.Flavors.FirstOrDefault(Flavor => Flavor.FlavorId == id);
+      Console.WriteLine(id);
+      var thisFlavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
       _db.Flavors.Remove(thisFlavor);
       _db.SaveChanges();
       return RedirectToAction("Index");

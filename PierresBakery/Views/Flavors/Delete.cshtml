@@ -8,6 +8,7 @@
 <p>Description: @Html.DisplayFor(model=>model.Description)</p>
 @using (Html.BeginForm())
 {
+  @Html.HiddenFor(model => model.FlavorId)
   <input type="submit" value="Delete" class="btn btn-danger" />
 }
 </br>

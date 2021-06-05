@@ -163,8 +163,8 @@ namespace PierresBakery.Controllers
     [HttpPost, ActionName("Delete")]
     public ActionResult DeleteConfirmed(int id)
     {
-      var thisFlavor = _db.Flavors.FirstOrDefault(Flavor => Flavor.FlavorId == id);
-      _db.Flavors.Remove(thisFlavor);
+      var thisTreat = _db.Treats.FirstOrDefault(t => t.TreatId == id);
+      _db.Treats.Remove(thisTreat);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }

@@ -1,0 +1,38 @@
+@{
+  Layout = "_Layout";
+}
+
+@using PierresBakery.Models
+
+<div class="text-center">
+  <h1 class="display-4">My List</h1>
+  <div class="row justify-content-center">
+    <div class="col-4">
+      <h4 class="">My Flavors</h4>
+      @if (@Model["flavors"].Count != 0)
+      {
+        @foreach (Flavor f in @Model["flavors"])
+        {
+          @Html.ActionLink($"{f.Name}", "Details", "Flavors", new {id = f.FlavorId})
+          <br>
+        }
+      }
+      <hr>
+      @Html.ActionLink("Add new Flavor", "Create", "Flavors")
+    </div>
+    <div class="col-4">
+      <h4 class="">My Treats</h4>
+      @if (@Model["treats"].Count != 0)
+      {
+        @foreach (Treat t in @Model["treats"])
+        {
+          @Html.ActionLink($"{t.Name}", "Details", "Treats", new {id = t.TreatId})
+          <br>
+        }
+      }
+      <hr>
+      @Html.ActionLink("Add new Treat", "Create", "Treats")
+
+    </div>
+  </div>
+</div>
