@@ -30,7 +30,6 @@ namespace PierresBakery.Controllers
     {
       if (User.Identity.IsAuthenticated)
       {
-        Console.WriteLine(User.ToString());
         var user = await _userManager.GetUserAsync(User);
         if (user.Id == t.User.Id)
         {

@@ -66,14 +66,12 @@ namespace PierresBakery.Controllers
       .Include(flavor => flavor.FlavorTreats)
       .ThenInclude(join => join.Treat)
       .FirstOrDefault(flavor => flavor.FlavorId == id);
-      Console.WriteLine(thisFlavor.Name);
       ViewBag.IsOwner =  await IsOwnerAsync(thisFlavor);
       return View(thisFlavor);
     }
 
     public async Task<ActionResult> Edit(int id)
     {
-      Console.Write(id);
       var thisFlavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
       var isOwnerAsync = await IsOwnerAsync(thisFlavor);
       if (!isOwnerAsync)
